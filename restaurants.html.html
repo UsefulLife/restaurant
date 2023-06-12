@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>レストラン一覧</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    .category-checkboxes label {
+      margin-right: 10px;
+    }
+    
+    .restaurant-image {
+      max-height: 100px;
+    }
+    
+    /* 追加したCSSスタイル */
+    .restaurant-image-cell {
+      width: 120px;
+    }
+  </style>
+  <script>
+    function filterByCategory() {
+      var table, tr, td, i;
+      table = document.getElementById("restaurantTable");
+      tr = table.getElementsByTagName("tr");
+
+      var checkboxes = document.querySelectorAll(".category-checkboxes input[type='checkbox']");
+      var selectedCategories = [];
+
+      for (i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          selectedCategories.push(checkboxes[i].value);
+        }
+      }
+
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[2];  // 画像列が3番目（インデックス2）になるように修正
+        if (td) {
+          if (selectedCategories.length === 0 || selectedCategories.includes(td.textContent.trim())) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    
+    // レストランデータの配列
+    var restaurants = [
+      {
+        name: "レストランA",
+        category: "ラーメン",
+        image: "ramen.jpg",
+        link: "https://example.com/restaurant-a"
+      },
+      {
+        name: "レストランB",
+        category: "ハンバーガー",
+        image: "hamburger.jpg",
+        link: "https://example.com/restaurant-b"
+      },
+      {
+        name: "レストランC",
+        category: "ピザ",
+        image: "pizza.jpg",
+        link: "https://example.com/restaurant-c"
+      },
+      {
+        name: "レストランD",
+        category: "寿司",
+        image: "sushi.jpg",
+        link: "https://example.com/restaurant-d"
+      },
+      {
+        name: "茨城レストラン1",
+        category: "和食",
+        image: "washoku.jpg",
+        link: "https://example.com/ibaraki-restaurant-1"
+      },
+      {
+        name: "茨城レストラン2",
+        category: "洋食　イタリアン",
+        image: "yoshoku.jpg",
+        link: "https://example.com/ibaraki-restaurant-2"
+      },
+      // 他のレストランを追加...
+      {
+        name: "茨城レストラン20",
+        category: "イタリアン",
+        image: "italian.jpg",
+        link: "https://example.com/ibaraki-restaurant-20"
+      }
+    ];
+    
+    // ページの読み込み完了時にテーブルを作成
+    document.addEventListener("DOMContentLoaded", function() {
+      var table = document.getElementById("restaurantTable");
+      restaurants.forEach(function(restaurant) {
+        var row = table.insertRow();
+        var imageCell = row.insertCell();
+        var nameCell = row.insertCell();
+        var categoryCell = row.insertCell();
+        var linkCell = row.insertCell();
+        
+        imageCell.className = "restaurant-image-cell";  // 追加したクラス名
+        imageCell.innerHTML = `<img src="${restaurant.image}" alt="${restaurant.name}" class="restaurant-image">`;
+        nameCell.textContent = restaurant.name;
+        categoryCell.textContent = restaurant.category;
+        linkCell.innerHTML = `<a href="${restaurant.link}">詳細を見る</a>`;
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>レストラン一覧</h1>
+    
+    <div class="category-checkboxes">
+      <label><input type="checkbox" value="ラーメン" onchange="filterByCategory()">ラーメン</label>
+      <label><input type="checkbox" value="ハンバーガー" onchange="filterByCategory()">ハンバーガー</label>
+      <label><input type="checkbox" value="ピザ" onchange="filterByCategory()">ピザ</label>
+      <label><input type="checkbox" value="寿司" onchange="filterByCategory()">寿司</label>
+      <label><input type="checkbox" value="和食" onchange="filterByCategory()">和食</label>  <!-- 和食を追加 -->
+      <label><input type="checkbox" value="洋食" onchange="filterByCategory()">洋食</label>
+      <label><input type="checkbox" value="イタリアン" onchange="filterByCategory()">イタリアン</label>
+    </div>
+
+    <table id="restaurantTable">
+      <tr>
+        <th>写真</th>
+        <th>店名</th>
+        <th>分類</th>
+        <th>リンク</th>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
